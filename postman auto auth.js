@@ -1,4 +1,8 @@
-//08/04/2021-16:03 robertocpaes.dev
+const email =  () => { return { key: 'email', value: pm.environment.get('email')}}
+const username =  () => { return { key: 'username', value: pm.environment.get('username')}}
+const type =  () => {
+return pm.environment.get('email') ? { key: 'email', value: pm.environment.get('email')} : { key: 'username', value: pm.environment.get('username')}
+} 
 const options = {
   url:  pm.environment.get('auth_url'), 
   method: 'POST',
@@ -8,15 +12,11 @@ const options = {
 body: {
     mode: 'urlencoded',
     urlencoded : [
-      { key: 'email', value: 'meulogin'},
-      { key: 'senha', value: 'minhasenha'},
+    { key: type().key, value: type().value },
+    { key: 'senha', value: pm.environment.get('senha')}
     ]
   }
 };
 pm.sendRequest(options, function (err, res) {
-	//token_key is a environment variable to get the request working in all routes..
     pm.environment.set("token_key", res.json().token);
 });
-
-    
-
